@@ -1,4 +1,4 @@
-#Modelo de ocupacion para Atlapetes blanca
+#Modelo de ocupacion para Atlapetes blancaeeee
 #Mauricio Díaz
 
 setwd("C:/Users/Mauricio Diaz/Documents/U/Tesis/Modelo de ocupacion/Datos y script")
