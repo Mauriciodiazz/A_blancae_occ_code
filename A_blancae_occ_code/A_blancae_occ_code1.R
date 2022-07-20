@@ -5,32 +5,23 @@ setwd("C:/Users/Mauricio Diaz/Documents/GitHub/A_blancae_occ_code/A_blancae_occ_
 #upload detection histories and variables
 hd<- read.table('Historias de deteccion.txt', header=T, sep = "\t")
 #occupancy
-ocu<-read.table('Ocupacion.txt', header=T, sep = "\t")
+ocu<-read.table('Occupancy.txt', header=T, sep = "\t")
 #detection
-det_ACI<-read.table('det_ACI.txt', header=T, sep = "\t")
 det_hora<-read.table('det_hora.txt', header=T, sep = "\t")
-det_ruido<-read.table('det_ruido.txt', header=T, sep = "\t")
 
 ##detection histories
 abla_hd<-hd[,2:8]
-
 ##occupancy variables (site)
-ocu_num<- scale(ocu[,c(-1,-9)]) #standardize
-id<- ocu[,1] #recorders ID
-site.cov<- data.frame(ocu_num,Cob_ROD=as.factor(ocu$Cob_Rod), A_vsbpe_50C=scale((ocu$A_vsbpe_50)^2))#characters to factors
-head(site.cov)
-
-
+site.cov<- data.frame(scale(ocu)) #standardize
 ##detection variables (obs)
-obs.cov<-list(hora=matrix(scale(as.numeric(as.matrix(det_hora))),nrow=80, ncol=7), ruido=matrix(scale(as.numeric(as.matrix(det_ruido))),nrow=80, ncol=7), ACI=matrix(scale(as.numeric(as.matrix(det_ACI))),nrow=80, ncol=7))
+obs.cov<-list(hora=matrix(scale(as.numeric(as.matrix(det_hora))),nrow=80, ncol=7))
 
 
 #correlation
 library(corrplot)
-vble.ocu<-site.cov[,c(2,4,5,8:28)]
-cor_ocu2<- cor(vble.ocu, method = "spearman")
-cor_ocu<- cor(site.cov[,1:19], method = "spearman")
-corrplot.mixed(cor_ocu2, lower = "number", 
+vble.ocu<-site.cov
+cor_ocu<- cor(vble.ocu, method = "spearman")
+corrplot.mixed(cor_ocu, lower = "number", 
                lower.col ="black", number.cex=.7,
                upper="square", order="FPC", title=" ",
                tl.cex=.7, tl.pos="lt", diag = "u")
@@ -49,9 +40,6 @@ abla_umf<- unmarkedFrameOccu(y=abla_hd, siteCovs = site.cov, obsCovs= obs.cov)
 #detection submodels
 ab_det1<- occu(~1~1, start=c(1,1), data=abla_umf) #null model
 ab_det2<- occu(~hora~1, data=abla_umf)
-ab_det3<- occu(~ACI~1, data=abla_umf) 
-ab_det4<- occu(~ruido~1, data=abla_umf)
-ab_det5<- occu(~hora+ACI+ruido~1, data=abla_umf)
 
 #list of models
 fms_detn <- fitList ("p(.)psi(.)"               =ab_det1,   
