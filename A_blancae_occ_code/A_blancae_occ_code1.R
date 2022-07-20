@@ -312,7 +312,6 @@ predplot_hora
 grid.arrange(predplot_sdt,  predplot_vsbpe, predplot_hora, nrow = 3, ncol = 1) 
 
 #model chi-squared
-
 oc_m22_ba<-mb.gof.test(ab_ocsim22, nsim = 500, plot.hist = TRUE)
 oc_m22_ba
 hist(oc_m22_ba$t.star, xlab=expression(paste("Xi"^"2")), ylab="Frecuencia", col="lightgrey",font.lab=2, cex.lab=0.9, main="Prueba bondad de ajuste modelo", sub="P-value = 0.342 / c-hat = 0.99")
