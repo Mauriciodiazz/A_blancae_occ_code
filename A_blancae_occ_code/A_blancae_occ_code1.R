@@ -1,11 +1,11 @@
 #Modelo de ocupacion para Atlapetes blancae
 #Mauricio Díaz
 
-setwd("C:/Users/Mauricio Diaz/Documents/U/Tesis/Modelo de ocupacion/Datos y script")
+setwd("C:/Users/Mauricio Diaz/Documents/GitHub/A_blancae_occ_code/A_blancae_occ_code/Data")
 #upload detection histories and variables
 hd<- read.table('Historias de deteccion.txt', header=T, sep = "\t")
 #occupancy
-ocu<-read.table('ocupacion.txt', header=T, sep = "\t")
+ocu<-read.table('Ocupacion.txt', header=T, sep = "\t")
 #detection
 det_ACI<-read.table('det_ACI.txt', header=T, sep = "\t")
 det_hora<-read.table('det_hora.txt', header=T, sep = "\t")
@@ -36,13 +36,13 @@ corrplot.mixed(cor_ocu2, lower = "number",
                tl.cex=.7, tl.pos="lt", diag = "u")
 
 #Occupancy models
-#cargar paqueteria
+#load packages
 library(unmarked) #Occupancy models package
 library(dplyr) #Data management
 library(kableExtra) #tables management
 library(ggplot2) #figure management
 library(gridExtra) #figure management
-library(AICcmodavg) #to AICc
+library(AICcmodavg) #statistics
 
 abla_umf<- unmarkedFrameOccu(y=abla_hd, siteCovs = site.cov, obsCovs= obs.cov)
 
@@ -295,7 +295,7 @@ predplot_vsbpe
 #detection variable (hour)
 newData_hora <- data.frame(hora=seq(1, 51, length=51))
 preddata_statehora <-predict(ab_ocsim22, type="det", newdata=newData_hora, appendData=TRUE)
-hora_real<- read.table("C:/Users/Mauricio Diaz/Documents/U/Tesis/Modelo de ocupacion/Datos y script/horas.txt", sep="\t")
+hora_real<- read.table("horas.txt", sep="\t")
 preddata_statehora$hora_real<-hora_real[,1]
 
 #to build the plot
@@ -324,8 +324,8 @@ library(fasterize) #raster
 library(raster) #raster
 library(terra) #raster
 
-cobs<-rast("C:/Users/Mauricio Diaz/Documents/U/Tesis/Becas/San pedro/Buffer/project_vsbpe/cobs_vsb_peWGS84.tif")
-sdt <- rast("C:/Users/Mauricio Diaz/Documents/U/Tesis/Becas/San pedro/Buffer/project_sdt/dxy_53m.tif")
+cobs<-rast("cobs_vsb_peWGS84.tif")
+sdt <- rast("dxy_53m.tif")
 
 cobs.ras <- aggregate(cobs, fact=53, fun="sum") 
 rast53_vsbpe<-cobs.ras
